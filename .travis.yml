@@ -13,8 +13,12 @@ before_script:
   - google-chrome-stable --product-version
 script:
   - npm test || travis_terminate 1
+  - echo 'npm run check-broken-links...' && echo -en 'travis_fold:start:script.blc\\r'
   - if [[ "$TRAVIS_NODE_VERSION" = "8" ]]; then npm run check-broken-links; fi
+  - echo -en 'travis_fold:end:script.blc\\r'
+  - echo 'npm run  js-test-cloud...' && echo -en 'travis_fold:start:script.browser\\r'
   - if [[ "$TRAVIS_NODE_VERSION" = "8" && "$TRAVIS_EVENT_TYPE" = "push" && ! `git log --format=%B --no-merges -n 1 | grep '\[skip browser\]'` ]]; then npm run js-test-cloud; fi
+  - echo -en 'travis_fold:end:script.browser\\r'
 after_success:
   - if [[ "$TRAVIS_NODE_VERSION" = "8" ]]; then npm run coveralls; fi
 cache:
