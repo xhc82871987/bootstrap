@@ -20,8 +20,7 @@ before_script:
 script:
   - npm test || travis_terminate 1
 
-  - |
-    if [[ "$TRAVIS_NODE_VERSION" = "8" ]]; then
+  - if [[ "$TRAVIS_NODE_VERSION" = "8" ]]; then
       travis_fold start "script.blc" "npm run check-broken-links..."
       travis_time_start
       npm run check-broken-links
@@ -29,8 +28,7 @@ script:
       travis_fold end "script.blc"
     fi
 
-  - |
-    if [[ "$TRAVIS_NODE_VERSION" = "8" && "$TRAVIS_EVENT_TYPE" = "push" && ! `git log --format=%B --no-merges -n 1 | grep '\[skip browser\]'` ]]; then
+  - if [[ "$TRAVIS_NODE_VERSION" = "8" && "$TRAVIS_EVENT_TYPE" = "push" && ! `git log --format=%B --no-merges -n 1 | grep '\[skip browser\]'` ]]; then
       travis_fold start "script.browser" "npm run js-test-cloud..."
       travis_time_start
       npm run js-test-cloud
